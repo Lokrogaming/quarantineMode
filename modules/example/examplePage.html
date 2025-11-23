@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>-- EXAMPLEPAGE --</title>
+</head>
+<body>
+    <h1>This is a example!</h1>
+    <article>ABOUT
+    <details>Empty</details></article>
+
+    <textarea readonly style="height:auto;width:auto;min-height:200px;min-width:100%">
+       Change maintenancemode and quarantine in the quarantineMode.json in your code. 
+       Set the examplePage.html value to "true"
+
+    </textarea>
+<br><br><br><br><br>
+    <textarea id="consoleOutput" readonly style="height:auto;width:auto;min-height:200px;min-width:100%">
+       The output will be displayed here
+    </textarea>
+   
+
+<script>
+    // consoleFunctions
+    const consoleOutput = document.getElementById("consoleOutput");
+
+    function printToOutput(msg) {
+        
+        consoleOutput.value = msg + "\n" + consoleOutput.value;
+    }
+</script>
+
+<script>
+    fetch('/modules/blocker/JS/JSON/quarantineMode.json')
+        .then(response => {
+            if (!response.ok) printToOutput("Datei konnte nicht geladen werden.");
+            return response.json();
+        })
+        .then(data => {
+            if (data.quarantine === true) {
+                printToOutput("QuarantineMode active");
+                return;
+            }
+
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+            if (data.maintenance && typeof data.maintenance === 'object') {
+                if (data.maintenance[currentPage] === true) {
+                    printToOutput("MaintenanceMode active");
+                }
+            }
+        })
+        .catch(error => {
+            printToOutput('Fehler beim Laden der JSON-Datei: ' + error);
+        });
+</script>
+
+</body>
+</html>

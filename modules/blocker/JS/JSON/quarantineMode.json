@@ -1,0 +1,8 @@
+{
+  "quarantine": false,
+  "maintenance": {
+    "index.html": true,
+    "main.html": true,
+    "examplePage.html": false
+  }
+}
